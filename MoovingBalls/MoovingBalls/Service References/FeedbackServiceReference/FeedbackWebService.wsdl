@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://hujtomi.sandbox.proserver.hu/feedback" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://hujtomi.sandbox.proserver.hu/feedback" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://hujtomi.sandbox.proserver.hu/feedback">
+      <s:element name="MakeFeedback">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="useremail" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="feedbacktext" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="gameName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MakeFeedbackResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MakeFeedbackResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="MakeFeedbackSoapIn">
+    <wsdl:part name="parameters" element="tns:MakeFeedback" />
+  </wsdl:message>
+  <wsdl:message name="MakeFeedbackSoapOut">
+    <wsdl:part name="parameters" element="tns:MakeFeedbackResponse" />
+  </wsdl:message>
+  <wsdl:portType name="FeedbackWebServiceSoap">
+    <wsdl:operation name="MakeFeedback">
+      <wsdl:input message="tns:MakeFeedbackSoapIn" />
+      <wsdl:output message="tns:MakeFeedbackSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FeedbackWebServiceSoap" type="tns:FeedbackWebServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="MakeFeedback">
+      <soap:operation soapAction="http://hujtomi.sandbox.proserver.hu/feedback/MakeFeedback" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="FeedbackWebServiceSoap12" type="tns:FeedbackWebServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="MakeFeedback">
+      <soap12:operation soapAction="http://hujtomi.sandbox.proserver.hu/feedback/MakeFeedback" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FeedbackWebService">
+    <wsdl:port name="FeedbackWebServiceSoap" binding="tns:FeedbackWebServiceSoap">
+      <soap:address location="http://hujtomi.sandbox.proserver.hu/FeedbackWebService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="FeedbackWebServiceSoap12" binding="tns:FeedbackWebServiceSoap12">
+      <soap12:address location="http://hujtomi.sandbox.proserver.hu/FeedbackWebService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

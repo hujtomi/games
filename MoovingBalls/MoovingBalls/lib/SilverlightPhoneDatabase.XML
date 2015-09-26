@@ -1,0 +1,404 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SilverlightPhoneDatabase</name>
+    </assembly>
+    <members>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.SaveException">
+            <summary>
+            Save exception class
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.SaveException.#ctor(System.Exception)">
+            <summary>
+            Create new instance of SaveException
+            </summary>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Cryptography">
+            <summary>
+            Class used to encrypt the database
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Cryptography.Encrypt(System.String,System.String)">
+            <summary>
+            Incrypt the input using password provided
+            </summary>
+            <param name="input">Input string to encrypt</param>
+            <param name="password">Password to use</param>
+            <returns>Encrypted string</returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Cryptography.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypt string using password provided
+            </summary>
+            <param name="base64Input">Input to decrypt</param>
+            <param name="password">Password to use</param>
+            <returns>Decrypted string</returns>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.TableExistsException">
+            <summary>
+            Exception thrown when table with the same name already exists
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.TableExistsException.#ctor(System.String)">
+            <summary>
+            Create new instance of TableExistsException exception
+            </summary>
+            <param name="exceptionText">Exception text</param>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.DatabaseDoesNotExistsException">
+            <summary>
+            Exception that indicates database open error
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.DatabaseDoesNotExistsException.#ctor(System.String)">
+            <summary>
+            Creates new instance of DatabaseDoesNotExistsException exception
+            </summary>
+            <param name="exceptionText">Exception text</param>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Core.SaveResult">
+            <summary>
+            Contains resutls of asynchronous Save operation
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Core.SaveResult.Error">
+            <summary>
+            Exception that occurred during save
+            </summary>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Resources.DatabaseResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.DatabaseDoesNotExistsExceptionText">
+            <summary>
+              Looks up a localized string similar to Database {0} does not exists.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.DatabaseExistsExceptionText">
+            <summary>
+              Looks up a localized string similar to Database {0} already exists.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.OpenError">
+            <summary>
+              Looks up a localized string similar to Cannot open database. See InnerException for details.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.SaveError">
+            <summary>
+              Looks up a localized string similar to Cannot save data. See InnerException for details.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.TableExistsExceptionText">
+            <summary>
+              Looks up a localized string similar to Table {0} already exists.
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Resources.DatabaseResources.TableWithoutDatabaseCannotBeSaved">
+            <summary>
+              Looks up a localized string similar to Table without database cannot be saved.
+            </summary>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Database">
+            <summary>
+            Database class - contains tables
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CreateDatabase(System.String)">
+            <summary>
+            Create new database instance with specified name
+            </summary>
+            <param name="databaseName">Database name</param>
+            <returns></returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CreateDatabase(System.String,System.String)">
+            <summary>
+            Create new database instance with specified name
+            </summary>
+            <param name="databaseName">Database name</param>
+            <param name="password">Password to ecrypt database with</param>
+            <returns></returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.OpenDatabase(System.String)">
+            <summary>
+            Open database from Isolated Storage
+            </summary>
+            <param name="databaseName">Name of database to open</param>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.OpenException">Thrown when an error occurs</exception>
+            <returns>Instance of the database</returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.OpenDatabase(System.String,System.String)">
+            <summary>
+            Open database from Isolated Storage
+            </summary>
+            <param name="databaseName">Name of database to open</param>
+            <param name="password">Password to use for encryption</param>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.OpenException">Thrown when an error occurs</exception>
+            <returns>Instance of the database</returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.OpenDatabase(System.String,System.String,System.Boolean)">
+            <summary>
+            Open database from Isolated Storage
+            </summary>
+            <param name="databaseName">Name of database to open</param>
+            <param name="password">Password to use for encryption</param>
+            <param name="useLazyLoading">If true, tables are not open immediately, but instead loaded on demend when accessed</param>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.OpenException">Thrown when an error occurs</exception>
+            <returns>Instance of the database</returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CreateNewTable(System.String,System.Type)">
+            <summary>
+            Create new table from predenined table content
+            This content must be created using the same table type
+            using XmlSerializer without encryption
+            </summary>
+            <param name="xmlTableContent">Xml string that describes the table</param>
+            <param name="rowType">Type of a row in the table</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.DeleteDatabase(System.String)">
+            <summary>
+            Delete database
+            </summary>
+            <param name="databaseName">Name of database to delete</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CreateTable``1">
+            <summary>
+            Create new table inside database
+            </summary>
+            <typeparam name="T">ype of object that this table contains</typeparam>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.Table``1">
+            <summary>
+            FInd instance of a table that contains specific row type
+            </summary>
+            <typeparam name="T">Type of object that this table contains</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CancelChanges``1">
+            <summary>
+            Cancel the pending changes to a table.
+            </summary>
+            <typeparam name="T">Type of class that table contains</typeparam>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.Save">
+            <summary>
+            Save database and all tables within it to Isolated Storage
+            </summary>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.SaveException">Thrown when an error currs during save</exception>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.BeginSave(System.Action{SilverlightPhoneDatabase.Core.SaveResult})">
+            <summary>
+            Asynchornously save table le to the Isolated Storage
+            </summary>
+            <param name="callback">Function  to be invoked after save complete</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.WriteDatabaseToStream(System.IO.Stream)">
+            <summary>
+            Write content of a database to a stream
+            </summary>
+            <param name="stream">Stream to write database to</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.CreateFormattedTableType(System.Type)">
+            <summary>
+            Create a string that represents a table type
+            </summary>
+            <param name="rowType">Type of row that is contained withing the table</param>
+            <returns>String that represents a table type</returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Database.DoesDatabaseExists(System.String)">
+            <summary>
+            Checks for existance of a database
+            </summary>
+            <param name="databaseName">Database name to check</param>
+            <returns>True if database exists, false otehrwise</returns>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Database.DatabaseName">
+            <summary>
+            Database name
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Database.Password">
+            <summary>
+            Password that the database is encrypted with.
+            Blank if no password is used
+            </summary>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Database.Tables">
+            <summary>
+            List of tables that belong to this database
+            </summary>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.OpenException">
+            <summary>
+            Open exception class
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.OpenException.#ctor(System.Exception)">
+            <summary>
+            Create new instance of OpenException
+            </summary>
+            <param name="innerException">Inner Exception</param>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.TableCannotBeSavedException">
+            <summary>
+            Exception that is thrown when stand-alone table is being
+            subject to save operation
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.TableCannotBeSavedException.#ctor(System.String)">
+            <summary>
+            Create new instance of TableCannotBeSavedException exception
+            </summary>
+            <param name="exceptionText">Exception text</param>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Core.ITable">
+            <summary>
+            Interface that is used for tables in a database
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Core.ITable.Save">
+            <summary>
+            Save table le to the Isolated Storage
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Core.ITable.WriteDTableToStream(System.IO.Stream)">
+            <summary>
+            Write content of a table to a file stream
+            </summary>
+            <param name="stream">Stream to write table to</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Core.ITable.SetTableDefinition(System.String,System.String)">
+            <summary>
+            Set internal variables data when a table is de-serialized
+            </summary>
+            <param name="databaseName">Database name that table belongs to</param>
+            <param name="password">Password to use for encryption</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Core.ITable.Save(System.IO.IsolatedStorage.IsolatedStorageFile)">
+            <summary>
+            Save table le to the Isolated Storage
+            </summary>
+            <param name="store">Isolated storeage file passed from database</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Core.ITable.BeginSave(System.Action{SilverlightPhoneDatabase.Core.SaveResult})">
+            <summary>
+            Asynchornously save table le to the Isolated Storage
+            </summary>
+            <param name="callback">Function  to be invoked after save complete</param>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Core.ITable.RowType">
+            <summary>
+            Type of object that database contains
+            </summary>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Table`1">
+            <summary>
+            Represents a table that contains rows of type T
+            </summary>
+            <typeparam name="T">Row type</typeparam>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.#ctor">
+            <summary>
+            Constror for table - use Database.CreateTable instead
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.SetTableDefinition(System.String,System.String)">
+            <summary>
+            Set internal variables data when a table is de-serialized
+            </summary>
+            <param name="databaseName">Database name that table belongs to</param>
+            <param name="password">Password to use for encryption</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.CreateTable(System.String,System.String)">
+            <summary>
+            Create new table for specified database
+            </summary>
+            <param name="databaseName">Database name that table belongs to</param>
+            <param name="password">Password to use for encryption</param>
+            <returns></returns>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.Save">
+            <summary>
+            Save table to isolated storage
+            </summary>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.SaveException">Thrown when an error currs during save</exception>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.BeginSave(System.Action{SilverlightPhoneDatabase.Core.SaveResult})">
+            <summary>
+            Asynchornously save table le to the Isolated Storage
+            </summary>
+            <param name="callback">Function  to be invoked after save complete</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.Save(System.IO.IsolatedStorage.IsolatedStorageFile)">
+            <summary>
+            Save table to isolated storage
+            </summary>
+            <param name="store">Isolated staorage file to save to</param>
+            <exception cref="T:SilverlightPhoneDatabase.Exceptions.SaveException">Thrown when an error currs during save</exception>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.WriteDTableToStream(System.IO.Stream)">
+            <summary>
+            Write content of a table to a stream
+            </summary>
+            <param name="stream">Stream to write table to</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Raises collection changed event
+            </summary>
+            <param name="e">Event args for collection changed event</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Add a range of items to the table
+            </summary>
+            <param name="range">Range of items</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.RemoveRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Remove a range of items from the table
+            </summary>
+            <param name="range">Range of items to remove</param>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Table`1.RemoveRange(System.Func{`0,System.Boolean})">
+            <summary>
+            Delete a range of items from the table based on
+            condtion being met
+            </summary>
+            <param name="deleteCondition">
+            Condition that must be met to delete the items
+            </param>
+        </member>
+        <member name="P:SilverlightPhoneDatabase.Table`1.RowType">
+            <summary>
+            Type of objec that this table contains
+            </summary>
+        </member>
+        <member name="T:SilverlightPhoneDatabase.Exceptions.DatabaseExistsException">
+            <summary>
+            Exception thrown when database with the same already exists
+            </summary>
+        </member>
+        <member name="M:SilverlightPhoneDatabase.Exceptions.DatabaseExistsException.#ctor(System.String)">
+            <summary>
+            Create new instance of DatabaseExistsException
+            </summary>
+            <param name="exceptionText">Exception text</param>
+        </member>
+    </members>
+</doc>
