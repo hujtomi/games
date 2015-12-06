@@ -1,0 +1,66 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Torpedo.HighScore"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="True">
+	<phone:PhoneApplicationPage.Resources>
+		<DataTemplate x:Key="ScoresDataTemplate">
+            <Border Background="#BC004DFF" BorderBrush="#FFFF9E5F" BorderThickness="5" CornerRadius="20" Padding="20,0,0,0" Margin="0,0,20,10">
+                <Grid Height="116" Width="400">
+                    <TextBlock Margin="8,8,101,0" TextWrapping="Wrap" Text="{Binding Name}" FontWeight="Bold" Foreground="Black" FontSize="24" Height="34" VerticalAlignment="Top"/>
+                    <TextBlock Margin="8,42,101,0" TextWrapping="Wrap" Text="{Binding GameDate}" FontSize="18.667" Height="27" VerticalAlignment="Top"/>
+                    <TextBlock Margin="118,73,105,17" TextWrapping="Wrap" Text="Used bombs:" Foreground="#FFFF9800"/>
+                    <TextBlock HorizontalAlignment="Right" Margin="0,8,8,0" TextWrapping="Wrap" Text="{Binding UsedBombs}" Width="93" FontSize="64" Foreground="Red" Height="94" VerticalAlignment="Top"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+	</phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <Grid Background="#A5000000" Margin="0,0,10,0">
+                <TextBlock x:Name="ApplicationTitle" Text="TORPEDO" Style="{StaticResource PhoneTextNormalStyle}" Margin="350,0,12,10" />
+                <TextBlock x:Name="PageTitle" Text="high scores" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" Foreground="#FFFF9D00" />
+            </Grid>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Border Background="#95FFFFFF" CornerRadius="10" BorderBrush="#A80000E3" BorderThickness="1">
+                <ListBox Name="HighScoreListBox" Margin="8" ItemTemplate="{StaticResource ScoresDataTemplate}" />
+            </Border>
+        </Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/color_background.png" />
+        </Grid.Background>
+    </Grid>
+ 
+    <!--Sample code showing usage of ApplicationBar-->
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+</phone:PhoneApplicationPage>
