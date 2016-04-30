@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using CocosSharp;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
+using System.Linq;
 
 namespace FishAndShips.Common
 {
@@ -12,9 +14,13 @@ namespace FishAndShips.Common
         CCSprite shipSprite;
         CCLabel scoreLabel;
         long gameStartTimeMillisecounds;
-        float fishY = Constants.Height / 2;
+        long previousFrameMillisecounds;
+        long lastZoomMillisecounds;
+        float fishCenterYCoordinate = Constants.Height / 2;
+        float targetCenterYCoordinate = Constants.Height / 2;
         CCDrawNode drawNode;
         bool gameStarted = false;
+        int fishAmplitude = 200;
 
         int score;
 
@@ -28,7 +34,7 @@ namespace FishAndShips.Common
             // "paddle" refers to the paddle.png image
             fishSprite = new CCSprite("fish");
             fishSprite.PositionX = 70;
-            fishSprite.PositionY = fishY;
+            fishSprite.PositionY = fishCenterYCoordinate;
             fishSprite.ContentSize = new CCSize(120, 60);
             AddChild(fishSprite);
 
@@ -45,7 +51,7 @@ namespace FishAndShips.Common
             AddChild(shipSprite);
 
             scoreLabel = new CCLabel("Score: 0", "Arial", 50, CCLabelFormat.SystemFont);
-            scoreLabel.PositionX = Constants.Width - 200;
+            scoreLabel.PositionX = Constants.Width - 300;
             scoreLabel.PositionY = Constants.Height;
             scoreLabel.AnchorPoint = CCPoint.AnchorUpperLeft;
             AddChild(scoreLabel);
@@ -71,28 +77,37 @@ namespace FishAndShips.Common
                 scoreLabel.PositionX = Constants.Width / 2;
                 scoreLabel.PositionY = Constants.Height / 2;
                 scoreLabel.AnchorPoint = CCPoint.AnchorMiddle;
-                gameStarted = false;         
+                gameStarted = false;
             }
             else
-            {
-                // First let’s get the ball position:   
-                float ballRight = netSprite.BoundingBoxTransformedToParent.MaxX;
-                float ballLeft = netSprite.BoundingBoxTransformedToParent.MinX;
-                // Then let’s get the screen edges
-                float screenRight = VisibleBoundsWorldspace.MaxX;
-                float screenLeft = VisibleBoundsWorldspace.MinX;
+            {               
+                long currentTimeMillisecounds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                netSprite.PositionX = Constants.Width - (((currentTimeMillisecounds - gameStartTimeMillisecounds) / 2) % Constants.Width);
+                shipSprite.PositionX = Constants.Width - (((currentTimeMillisecounds - gameStartTimeMillisecounds) / 3) % Constants.Width);
 
-                long millisecounds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-                netSprite.PositionX = Constants.Width - (((millisecounds - gameStartTimeMillisecounds) / 2) % Constants.Width);
-                shipSprite.PositionX = Constants.Width - (((millisecounds - gameStartTimeMillisecounds) / 10) % Constants.Width);
-
+                if(fishCenterYCoordinate > targetCenterYCoordinate)
+                {
+                    fishCenterYCoordinate -= (int)((currentTimeMillisecounds - previousFrameMillisecounds) / 3d);
+                }
+                else if (fishCenterYCoordinate < targetCenterYCoordinate)
+                {
+                    fishCenterYCoordinate += (int)((currentTimeMillisecounds - previousFrameMillisecounds) / 3d);
+                }
+                
                 drawNode.Clear();
-                drawNode.DrawLine(new CCPoint(0, fishY), new CCPoint(Constants.Width, fishY), new CCColor4B(100, 100, 100));
+                drawNode.DrawLine(new CCPoint(0, fishCenterYCoordinate), new CCPoint(Constants.Width, fishCenterYCoordinate), new CCColor4B(100, 100, 100));
+                drawNode.DrawLine(new CCPoint(0, fishCenterYCoordinate - fishAmplitude), new CCPoint(Constants.Width, fishCenterYCoordinate - fishAmplitude), new CCColor4B(139, 0, 0));
+                drawNode.DrawLine(new CCPoint(0, fishCenterYCoordinate + fishAmplitude), new CCPoint(Constants.Width, fishCenterYCoordinate + fishAmplitude), new CCColor4B(139, 0, 0));
 
-                fishSprite.PositionY = (fishY + (int)(Math.Sin(millisecounds / 400d) * 200));
+                fishSprite.PositionY = (fishCenterYCoordinate + (int)(Math.Sin(currentTimeMillisecounds / 400d) * fishAmplitude));
+                if (fishSprite.PositionY < 0)
+                    fishSprite.PositionY = 0;
+                if (fishSprite.PositionY > Constants.Height)
+                    fishSprite.PositionY = Constants.Height;
 
-                score = (int)((millisecounds - gameStartTimeMillisecounds) / 1000);
+                score = (int)((currentTimeMillisecounds - gameStartTimeMillisecounds) / 1000);
                 scoreLabel.Text = "Score: " + score;
+                previousFrameMillisecounds = currentTimeMillisecounds;
             }
         }
 
@@ -120,6 +135,7 @@ namespace FishAndShips.Common
                     RemoveAllChildren();
                     Init();
                     gameStartTimeMillisecounds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                    previousFrameMillisecounds = gameStartTimeMillisecounds;
                     Schedule(RunGameLogic);
                     gameStarted = true;
                 }
@@ -128,9 +144,38 @@ namespace FishAndShips.Common
 
         void HandleTouchesMoved(System.Collections.Generic.List<CCTouch> touches, CCEvent touchEvent)
         {
-            // we only care about the first touch:
-            var locationOnScreen = touches[0].Location;
-            fishY = locationOnScreen.Y;
+            if (touches.Count == 1)
+            {
+                if((DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - lastZoomMillisecounds > 500)
+                    targetCenterYCoordinate = (int)touches[0].Location.Y;
+            }
+            if (touches.Count > 1)
+            {
+                var touch = touches.OrderByDescending(t => t.Location.Y).First();
+
+                if (touch.PreviousLocation.Y > touch.Location.Y)
+                {
+                    if (fishAmplitude > 100)
+                    {
+                        int deltaY = (int)(touch.PreviousLocation.Y - touch.Location.Y);
+                        fishAmplitude -= deltaY;
+                        if (fishAmplitude < 100)
+                            fishAmplitude = 100;                   
+                    }
+                }
+                else if (touch.PreviousLocation.Y < touch.Location.Y)
+                {
+                    if (fishAmplitude < 300)
+                    {
+                        int deltaY = (int)(touch.Location.Y - touch.PreviousLocation.Y);
+                        fishAmplitude += deltaY;
+                        if (fishAmplitude > 300)
+                            fishAmplitude = 300;
+                    }
+                }
+                lastZoomMillisecounds = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                targetCenterYCoordinate = fishCenterYCoordinate;
+            }            
         }
     }
 }
